@@ -31,6 +31,40 @@
             rnix-lsp
           ];
         };
+        runtimeLibs = [
+          common.pkgs.openssl
+          common.pkgs.pkg-config
+        ];
+      };
+      pkgConfig = common: {
+        aiken = {
+          build = true;
+          app = true;
+          depsOverrides = {
+            sys-deps = {
+              overrideAttrs = old: {
+                buildInputs =
+                  (old.buildInputs or [])
+                  ++ [
+                    common.pkgs.openssl
+                    common.pkgs.pkg-config
+                  ];
+              };
+            };
+          };
+          overrides = {
+            sys-deps = {
+              overrideAttrs = old: {
+                buildInputs =
+                  (old.buildInputs or [])
+                  ++ [
+                    common.pkgs.openssl
+                    common.pkgs.pkg-config
+                  ];
+              };
+            };
+          };
+        };
       };
     };
 }
