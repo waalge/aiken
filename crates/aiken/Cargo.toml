@@ -29,3 +29,10 @@ aiken-lsp = { path = "../aiken-lsp", version = "0.0.28" }
 aiken-project = { path = '../aiken-project', version = "0.0.28" }
 uplc = { path = '../uplc', version = "0.0.28" }
 serde_json = "1.0.91"
+
+[package.metadata.nix]
+build=true
+app=true
+
+[package.metadata.nix.overrides.ssl] # Move to flake.nix
+buildInputs=["openssl"]
