@@ -48,4 +48,6 @@ pub enum Error {
     DeserialisationError(String, Value),
     #[error("Integer overflow")]
     OverflowError,
+    #[error(transparent)]
+    Secp256k1(#[from] secp256k1::Error),
 }
