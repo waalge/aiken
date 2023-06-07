@@ -40,7 +40,7 @@
           packageFun = import ./Cargo.nix;
           packageOverrides = pkgs: pkgs.rustBuilder.overrides.all ++
                [ (pkgs.rustBuilder.rustLib.makeOverride
-                   { name = "aiken" ; overrideAttrs = drv: { GIT_REVISION=gitRev ; } ; } ) ] ; 
+                   { name = "aiken" ; overrideAttrs = drv: { GIT_REVISION="HELLO"; } ; } ) ] ; 
           };
 
         commonCategory = y: builtins.map (x: x // {category = y;});
