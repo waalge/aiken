@@ -63,7 +63,8 @@
           packages = [deno];
           shellHook =
           ''
-            export GIT_REVISION=${gitRev}
+          echo hook
+          export GIT_REVISION=${gitRev}
           '';
         };
         devShells = {
