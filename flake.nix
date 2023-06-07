@@ -38,7 +38,10 @@
         rustPkgs = pkgs.rustBuilder.makePackageSet {
           rustVersion = "1.69.0";
           packageFun = import ./Cargo.nix;
-        };
+          packageOverrides = pkgs: pkgs.rustBuilder.overrides.all ++
+               [ (pkgs.rustBuilder.rustLib.makeOverride
+                   { name = "aiken" ; overrideAttrs = drv: { GIT_REVISION=gitRev ; } ; } ) ] ; 
+          };
 
         commonCategory = y: builtins.map (x: x // {category = y;});
 
@@ -61,11 +64,6 @@
         inherit packages;
         devShell = rustPkgs.workspaceShell {
           packages = [deno];
-          shellHook =
-          ''
-          echo hook
-          export GIT_REVISION=${gitRev}
-          '';
         };
         devShells = {
           aiken = pkgs.devshell.mkShell {
