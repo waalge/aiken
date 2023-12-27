@@ -37,6 +37,10 @@ pub struct Args {
     /// Remove traces when generating code (including tests)
     #[clap(long)]
     no_traces: bool,
+
+    /// Remove traces when generating code (including tests)
+    #[clap(long)]
+    output_json: Option<PathBuf>,
 }
 
 pub fn exec(
@@ -49,6 +53,7 @@ pub fn exec(
         exact_match,
         no_traces,
         watch,
+        output_json,
         ..
     }: Args,
 ) -> miette::Result<()> {
@@ -60,6 +65,7 @@ pub fn exec(
                 debug,
                 exact_match,
                 (!no_traces).into(),
+                output_json.clone(),
             )
         })
     } else {
@@ -70,6 +76,7 @@ pub fn exec(
                 debug,
                 exact_match,
                 (!no_traces).into(),
+                output_json.clone(),
             )
         })
     };

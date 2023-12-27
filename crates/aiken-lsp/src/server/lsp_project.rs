@@ -34,7 +34,7 @@ impl LspProject {
 
         let result = self
             .project
-            .check(true, None, false, false, Tracing::NoTraces);
+            .check(true, None, false, false, Tracing::NoTraces, None);
 
         self.project.restore(checkpoint);
 

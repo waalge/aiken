@@ -210,6 +210,7 @@ where
         verbose: bool,
         exact_match: bool,
         tracing: Tracing,
+        output_json: Option<PathBuf>,
     ) -> Result<(), Vec<Error>> {
         let options = Options {
             tracing,
@@ -220,6 +221,7 @@ where
                     match_tests,
                     verbose,
                     exact_match,
+                    output_json,
                 }
             },
         };
@@ -310,6 +312,7 @@ where
                 match_tests,
                 verbose,
                 exact_match,
+                output_json,
             } => {
                 let tests =
                     self.collect_tests(verbose, match_tests, exact_match, options.tracing.into())?;
@@ -340,9 +343,13 @@ where
                         }
                     })
                     .collect();
-
-                self.event_listener
-                    .handle_event(Event::FinishedTests { tests: results });
+                if output_json.is_some() {
+                    self.event_listener
+                        .handle_event(Event::FinishedTestsJson { tests: results, output_path : output_json.unwrap() });
+                } else {
+                    self.event_listener
+                        .handle_event(Event::FinishedTests { tests: results });
+                }
 
                 if !errors.is_empty() {
                     Err(errors)
