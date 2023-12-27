@@ -344,8 +344,10 @@ where
                     })
                     .collect();
                 if output_json.is_some() {
-                    self.event_listener
-                        .handle_event(Event::FinishedTestsJson { tests: results, output_path : output_json.unwrap() });
+                    self.event_listener.handle_event(Event::FinishedTestsJson {
+                        tests: results,
+                        output_path: output_json.unwrap(),
+                    });
                 } else {
                     self.event_listener
                         .handle_event(Event::FinishedTests { tests: results });

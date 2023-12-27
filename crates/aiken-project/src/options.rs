@@ -1,5 +1,5 @@
-use std::path::PathBuf;
 use aiken_lang::ast::Tracing;
+use std::path::PathBuf;
 
 pub struct Options {
     pub code_gen_mode: CodeGenMode,

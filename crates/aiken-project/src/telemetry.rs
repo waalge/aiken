@@ -4,7 +4,7 @@ use owo_colors::{
     OwoColorize,
     Stream::{self, Stderr},
 };
-use std::{collections::BTreeMap, fmt::Display, path::PathBuf, fs::File};
+use std::{collections::BTreeMap, fmt::Display, fs::File, path::PathBuf};
 use uplc::machine::cost_model::ExBudget;
 
 use serde::{Deserialize, Serialize};
@@ -223,15 +223,15 @@ impl EventListener for Terminal {
                 }
             }
             Event::FinishedTestsJson { tests, output_path } => {
-                let mut reports : Vec<(String, Vec<(String, TestRes)>)> = Vec::new();
+                let mut reports: Vec<(String, Vec<(String, TestRes)>)> = Vec::new();
                 for (module, infos) in &group_by_module(&tests) {
-                    let title = module
-                        .to_string();
+                    let title = module.to_string();
 
                     let tests = infos
                         .iter()
-                        .map(|eval_info| mk_test_summary(eval_info ))
+                        .map(|eval_info| mk_test_summary(eval_info))
                         .collect::<Vec<(String, TestRes)>>();
+                    reports.push((title, tests))
                 }
                 let mut file = File::create(output_path).unwrap();
                 serde_json::to_writer(&mut file, &reports).unwrap();
@@ -402,8 +402,8 @@ fn fmt_eval(eval_info: &EvalInfo, max_mem: usize, max_cpu: usize, stream: Stream
 
 #[derive(Serialize, Deserialize)]
 struct TestRes {
-    status : bool,
-    mem : i64,
+    status: bool,
+    mem: i64,
     cpu: i64,
 }
 
@@ -417,7 +417,14 @@ fn mk_test_summary(eval_info: &EvalInfo) -> (String, TestRes) {
 
     let ExBudget { mem, cpu } = spent_budget;
 
-    (script.name.clone(), TestRes { status : *success, mem : *mem, cpu : *cpu, })
+    (
+        script.name.clone(),
+        TestRes {
+            status: *success,
+            mem: *mem,
+            cpu: *cpu,
+        },
+    )
 }
 
 fn group_by_module(infos: &Vec<EvalInfo>) -> BTreeMap<String, Vec<&EvalInfo>> {
