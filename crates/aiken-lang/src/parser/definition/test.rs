@@ -3,7 +3,7 @@ use chumsky::prelude::*;
 use crate::{
     ast,
     expr::UntypedExpr,
-    parser::{error::ParseError, expr, token::Token},
+    parser::{error::ParseError, expr, token::Token, definition::function::param},
 };
 
 pub fn parser() -> impl Parser<Token, ast::UntypedDefinition, Error = ParseError> {
@@ -13,7 +13,15 @@ pub fn parser() -> impl Parser<Token, ast::UntypedDefinition, Error = ParseError
         .or_not()
         .then_ignore(just(Token::Test))
         .then(select! {Token::Name {name} => name})
+        .then(
+            param(false)
+                .separated_by(just(Token::Comma))
+                .allow_trailing()
+                .delimited_by(just(Token::LeftParen), just(Token::RightParen))
+                .map_with_span(|arguments, span| (arguments, span)),
+        )
         .then_ignore(just(Token::LeftParen))
+        
         .then_ignore(just(Token::RightParen))
         .then(just(Token::Fail).ignored().or_not())
         .map_with_span(|name, span| (name, span))
